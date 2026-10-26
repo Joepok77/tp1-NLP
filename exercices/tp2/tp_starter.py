@@ -7,13 +7,15 @@ Executez ce fichier section par section (ou copiez les fonctions dans un noteboo
 """
 
 import re
+from pathlib import Path
 import pandas as pd
 import spacy
 from collections import Counter
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
-DATA_PATH = "tickets_support_iot.csv"
+# Chemin du CSV a cote de ce script, pour pouvoir lancer le script depuis n'importe quel dossier
+DATA_PATH = Path(__file__).parent / "tickets_support_iot.csv"
 
 # ---------------------------------------------------------------------------
 # Etape 1 - Prise en main
@@ -27,7 +29,14 @@ def charger_donnees(path: str) -> pd.DataFrame:
       - verifier qu'il contient bien les colonnes id, categorie, texte
       - retourner le DataFrame
     """
-    raise NotImplementedError
+    df = pd.read_csv(path)
+
+    colonnes_attendues = {"id", "categorie", "texte"}
+    manquantes = colonnes_attendues - set(df.columns)
+    if manquantes:
+        raise ValueError(f"Colonnes manquantes dans le CSV : {manquantes}")
+
+    return df
 
 
 # ---------------------------------------------------------------------------
@@ -117,8 +126,12 @@ if __name__ == "__main__":
     nlp = spacy.load("fr_core_news_sm")
     stop_fr = set(stopwords.words("french"))
 
+    # Etape 1
     df = charger_donnees(DATA_PATH)
     print(df.head())
+    print("\nNombre total de tickets :", len(df))
+    print("\nRepartition par categorie :")
+    print(df["categorie"].value_counts())
 
     # Decommentez au fur et a mesure de votre progression dans le TP :
     # exemple = df.loc[0, "texte"]
