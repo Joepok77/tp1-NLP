@@ -48,7 +48,7 @@ python -m nltk.downloader punkt_tab stopwords wordnet averaged_perceptron_tagger
 Lancer l'exercice :
 
 ```bash
-python exercices/exercice1.py
+python exercices/tp1/exercice1.py
 ```
 
 Le script applique quatre étapes au texte du sujet avec NLTK :
