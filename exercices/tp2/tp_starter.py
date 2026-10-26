@@ -52,17 +52,23 @@ def nettoyer_texte(texte: str) -> str:
         ni des apostrophes/tirets internes aux mots
       - reduire les espaces multiples a un seul espace
     """
-    raise NotImplementedError
+    texte = texte.lower()
+    # remplace par un espace tout ce qui n'est ni lettre, ni espace, ni ' ou - (chiffres et _ compris)
+    texte = re.sub(r"[^\w\s'-]|[\d_]", " ", texte)
+    # ne garde ' et - qu'entre deux lettres (l'icone, wi-fi), pas isoles ou en bord de mot
+    texte = re.sub(r"(?<!\w)['-]|['-](?!\w)", " ", texte)
+    texte = re.sub(r"\s+", " ", texte)
+    return texte.strip()
 
 
 def tokenizer_nltk(texte_nettoye: str) -> list:
     """Tokenize un texte nettoye avec NLTK (word_tokenize)."""
-    raise NotImplementedError
+    return word_tokenize(texte_nettoye, language="french")
 
 
 def tokenizer_spacy(texte_nettoye: str, nlp) -> list:
     """Tokenize un texte nettoye avec spaCy et retourne la liste des tokens (texte brut)."""
-    raise NotImplementedError
+    return [token.text for token in nlp(texte_nettoye)]
 
 
 # ---------------------------------------------------------------------------
@@ -132,6 +138,25 @@ if __name__ == "__main__":
     print("\nNombre total de tickets :", len(df))
     print("\nRepartition par categorie :")
     print(df["categorie"].value_counts())
+
+    # Etape 2 - comparaison NLTK / spaCy sur le premier ticket
+    exemple = df.loc[0, "texte"]
+    nettoye = nettoyer_texte(exemple)
+    tokens_nltk = tokenizer_nltk(nettoye)
+    tokens_spacy = tokenizer_spacy(nettoye, nlp)
+
+    print("\nTexte brut    :", exemple)
+    print("Texte nettoye :", nettoye)
+    print(f"\nNLTK  ({len(tokens_nltk)} tokens) :", tokens_nltk)
+    print(f"spaCy ({len(tokens_spacy)} tokens) :", tokens_spacy)
+    print("Seulement NLTK  :", sorted(set(tokens_nltk) - set(tokens_spacy)))
+    print("Seulement spaCy :", sorted(set(tokens_spacy) - set(tokens_nltk)))
+
+    # Meme comparaison sur tout le corpus
+    textes_nettoyes = df["texte"].apply(nettoyer_texte)
+    total_nltk = sum(len(tokenizer_nltk(t)) for t in textes_nettoyes)
+    total_spacy = sum(len(tokenizer_spacy(t, nlp)) for t in textes_nettoyes)
+    print(f"\nSur les {len(df)} tickets : {total_nltk} tokens NLTK, {total_spacy} tokens spaCy")
 
     # Decommentez au fur et a mesure de votre progression dans le TP :
     # exemple = df.loc[0, "texte"]
