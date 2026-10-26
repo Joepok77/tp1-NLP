@@ -1,0 +1,7 @@
+categorie,nb_tickets,vocab_brut,vocab_pipeline,top5_lemmes
+batterie,8,108,54,"capteur, batterie, jour, autonomie, module"
+connectivite,11,131,74,"capteur, mqtt, cloud, connexion, latence"
+firmware,9,109,63,"mise, jour, capteur, firmware, version"
+installation,7,93,53,"installation, configuration, industriel, aide, capteur"
+interface,8,100,60,"tableau, bord, site, valeur, rapport"
+securite,7,98,53,"détecter, certificat, capteur, passerelle, site"

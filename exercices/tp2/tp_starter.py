@@ -115,7 +115,10 @@ def pipeline_complet(texte: str, nlp, stopwords_fr: set) -> list:
 
     Doit retourner la liste finale de lemmes exploitables pour un ticket.
     """
-    raise NotImplementedError
+    # nettoyage -> filtre POS (tokenization + lemmes) -> stopwords
+    nettoye = nettoyer_texte(texte)
+    lemmes = filtrer_par_pos(nettoye, nlp)
+    return supprimer_stopwords(lemmes, stopwords_fr)
 
 
 def rapport_par_categorie(df: pd.DataFrame, nlp, stopwords_fr: set) -> pd.DataFrame:
@@ -127,7 +130,24 @@ def rapport_par_categorie(df: pd.DataFrame, nlp, stopwords_fr: set) -> pd.DataFr
 
     Retourne un DataFrame recapitulatif, une ligne par categorie.
     """
-    raise NotImplementedError
+    lignes = []
+    for categorie, groupe in df.groupby("categorie"):
+        # vocabulaire brut : mots distincts du texte tel quel, separes par les espaces
+        vocab_brut = {mot for texte in groupe["texte"] for mot in texte.split()}
+
+        lemmes = []
+        for texte in groupe["texte"]:
+            lemmes += pipeline_complet(texte, nlp, stopwords_fr)
+
+        top5 = vocabulaire_frequent(lemmes, 5)
+        lignes.append({
+            "categorie": categorie,
+            "nb_tickets": len(groupe),
+            "vocab_brut": len(vocab_brut),
+            "vocab_pipeline": len(set(lemmes)),
+            "top5_lemmes": ", ".join(lemme for lemme, _ in top5),
+        })
+    return pd.DataFrame(lignes)
 
 
 if __name__ == "__main__":
@@ -186,8 +206,13 @@ if __name__ == "__main__":
         tous_les_lemmes += supprimer_stopwords(filtrer_par_pos(t, nlp), stop_fr)
     print("\nTop 15 lemmes :", vocabulaire_frequent(tous_les_lemmes, 15))
 
-    # Decommentez au fur et a mesure de votre progression dans le TP :
-    # exemple = df.loc[0, "texte"]
-    # print(nettoyer_texte(exemple))
-    # print(pipeline_complet(exemple, nlp, stop_fr))
-    # print(rapport_par_categorie(df, nlp, stop_fr))
+    # Etape 5 - pipeline complet sur le premier ticket, puis rapport par categorie
+    print("\nPipeline complet (ticket 1) :", pipeline_complet(exemple, nlp, stop_fr))
+
+    rapport = rapport_par_categorie(df, nlp, stop_fr)
+    print("\nRapport par categorie :")
+    print(rapport.to_string(index=False))
+
+    chemin_rapport = Path(__file__).parent / "rapport_categories.csv"
+    rapport.to_csv(chemin_rapport, index=False)
+    print("\nRapport exporte :", chemin_rapport)
