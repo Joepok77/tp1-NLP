@@ -97,12 +97,13 @@ def filtrer_par_pos(texte_nettoye: str, nlp, pos_autorises=("NOUN", "VERB", "ADJ
 
 def extraire_entites(texte: str, nlp) -> list:
     """Retourne la liste des entites nommees (texte, label) detectees par spaCy."""
-    raise NotImplementedError
+    # sur le texte brut : les majuscules aident spaCy a reperer les noms propres
+    return [(ent.text, ent.label_) for ent in nlp(texte).ents]
 
 
 def vocabulaire_frequent(tous_les_tokens: list, top_n: int = 20) -> list:
     """Retourne les top_n tokens les plus frequents (token, occurrences)."""
-    raise NotImplementedError
+    return Counter(tous_les_tokens).most_common(top_n)
 
 
 # ---------------------------------------------------------------------------
@@ -169,6 +170,21 @@ if __name__ == "__main__":
     print(f"Lemmes               ({len(lemmes)}) :", lemmes)
     print(f"Lemmes filtres (POS) ({len(lemmes_pos)}) :", lemmes_pos)
     print("Detail POS :", [(token.text, token.pos_) for token in nlp(nettoye)])
+
+    # Etape 4 - entites nommees sur une phrase avec un lieu et une organisation
+    phrase = "Le technicien de Schneider Electric est intervenu sur le site de Lyon pour configurer le broker MQTT."
+    print("\nPhrase test :", phrase)
+    print("Entites :", extraire_entites(phrase, nlp))
+
+    # Entites detectees dans tout le corpus (texte brut)
+    entites_corpus = Counter(e for t in df["texte"] for e in extraire_entites(t, nlp))
+    print("\nEntites du corpus :", entites_corpus.most_common())
+
+    # 15 lemmes les plus frequents apres le pipeline de l'etape 3
+    tous_les_lemmes = []
+    for t in textes_nettoyes:
+        tous_les_lemmes += supprimer_stopwords(filtrer_par_pos(t, nlp), stop_fr)
+    print("\nTop 15 lemmes :", vocabulaire_frequent(tous_les_lemmes, 15))
 
     # Decommentez au fur et a mesure de votre progression dans le TP :
     # exemple = df.loc[0, "texte"]
