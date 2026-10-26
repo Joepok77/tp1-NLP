@@ -77,17 +77,18 @@ def tokenizer_spacy(texte_nettoye: str, nlp) -> list:
 
 def supprimer_stopwords(tokens: list, stopwords_fr: set) -> list:
     """Retire les mots vides (stopwords) d'une liste de tokens."""
-    raise NotImplementedError
+    # la liste NLTK contient "l", "d"... sans apostrophe, alors que spaCy produit "l'", "d'"
+    return [token for token in tokens if token.rstrip("'") not in stopwords_fr]
 
 
 def lemmatiser_spacy(texte_nettoye: str, nlp) -> list:
     """Retourne la liste des lemmes (formes canoniques) des tokens du texte, via spaCy."""
-    raise NotImplementedError
+    return [token.lemma_ for token in nlp(texte_nettoye)]
 
 
 def filtrer_par_pos(texte_nettoye: str, nlp, pos_autorises=("NOUN", "VERB", "ADJ")) -> list:
     """Ne garde que les lemmes dont l'etiquette POS (part-of-speech) est dans pos_autorises."""
-    raise NotImplementedError
+    return [token.lemma_ for token in nlp(texte_nettoye) if token.pos_ in pos_autorises]
 
 
 # ---------------------------------------------------------------------------
@@ -157,6 +158,17 @@ if __name__ == "__main__":
     total_nltk = sum(len(tokenizer_nltk(t)) for t in textes_nettoyes)
     total_spacy = sum(len(tokenizer_spacy(t, nlp)) for t in textes_nettoyes)
     print(f"\nSur les {len(df)} tickets : {total_nltk} tokens NLTK, {total_spacy} tokens spaCy")
+
+    # Etape 3 - tokens bruts -> sans stopwords -> lemmes filtres par POS (premier ticket)
+    sans_stopwords = supprimer_stopwords(tokens_spacy, stop_fr)
+    lemmes = lemmatiser_spacy(nettoye, nlp)
+    lemmes_pos = filtrer_par_pos(nettoye, nlp)
+
+    print(f"\nTokens bruts         ({len(tokens_spacy)}) :", tokens_spacy)
+    print(f"Sans stopwords       ({len(sans_stopwords)}) :", sans_stopwords)
+    print(f"Lemmes               ({len(lemmes)}) :", lemmes)
+    print(f"Lemmes filtres (POS) ({len(lemmes_pos)}) :", lemmes_pos)
+    print("Detail POS :", [(token.text, token.pos_) for token in nlp(nettoye)])
 
     # Decommentez au fur et a mesure de votre progression dans le TP :
     # exemple = df.loc[0, "texte"]
