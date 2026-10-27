@@ -109,7 +109,13 @@ def prompt_cot(texte: str) -> str:
     TODO : demander un raisonnement etape par etape, puis exiger une
     conclusion au format exact "Categorie: <nom>".
     """
-    raise NotImplementedError
+    return (
+        "Classe ce ticket de support client dans une seule de ces catégories : "
+        + ", ".join(CATEGORIES) + ".\n"
+        "Explique ton raisonnement en une phrase, puis termine par une ligne au format exact :\n"
+        "Categorie: <nom>\n\n"
+        "Ticket : " + texte
+    )
 
 
 def extraire_categorie_cot(reponse: str) -> str:
@@ -118,7 +124,11 @@ def extraire_categorie_cot(reponse: str) -> str:
     TODO : utiliser une expression reguliere pour chercher "Categorie: <nom>"
     dans le texte de la reponse, plutot qu'une simple recherche de sous-chaine.
     """
-    raise NotImplementedError
+    # cherche "Categorie: xxx" (avec ou sans accent, ** markdown eventuels) et garde la derniere trouvee
+    trouves = re.findall(r"cat[ée]gorie\s*:\s*\**\s*(\w+)", reponse, re.IGNORECASE)
+    if not trouves:
+        return "INCONNUE"
+    return nettoyer_reponse(trouves[-1])
 
 
 # ---------------------------------------------------------------------------
@@ -156,8 +166,9 @@ if __name__ == "__main__":
     print(appeler_llm("Explique en une phrase ce qu'est un capteur IoT", model="gemini-3.5-flash-lite"))
 
     # Decommentez au fur et a mesure de votre progression :
-    acc_zero, preds_zero = evaluer_approche(echantillon, prompt_zero_shot, nettoyer_reponse)
-    print("Accuracy zero-shot :", acc_zero)
+    
+    # acc_zero, preds_zero = evaluer_approche(echantillon, prompt_zero_shot, nettoyer_reponse)
+    # print("Accuracy zero-shot :", acc_zero)
 
     # Etape 3 - few-shot : 1 exemple par categorie, choisis HORS des 15 tickets de test
     exemples = [
@@ -173,5 +184,16 @@ if __name__ == "__main__":
     def prompt_few_shot_tp(texte):
         return prompt_few_shot(texte, exemples)
 
-    acc_few, preds_few = evaluer_approche(echantillon, prompt_few_shot_tp, nettoyer_reponse, pause=4)
-    print("Accuracy few-shot :", acc_few)
+    # acc_few, preds_few = evaluer_approche(echantillon, prompt_few_shot_tp, nettoyer_reponse, pause=4)
+    # print("Accuracy few-shot :", acc_few)
+
+    # Etape 4 - chain-of-thought sur 8 tickets ambigus (hors des 15 tickets de test)
+    tickets_cot = df[df["id"].isin([15, 25, 33, 35, 40, 43, 53, 72])]
+
+    print("\nZero-shot sur les tickets ambigus :")
+    acc_zero_amb, preds_zero_amb = evaluer_approche(tickets_cot, prompt_zero_shot, nettoyer_reponse, pause=4)
+    print("Accuracy zero-shot (ambigus) :", acc_zero_amb)
+
+    print("\nChain-of-thought sur les tickets ambigus :")
+    acc_cot, preds_cot = evaluer_approche(tickets_cot, prompt_cot, extraire_categorie_cot, pause=4)
+    print("Accuracy chain-of-thought (ambigus) :", acc_cot)
