@@ -87,7 +87,16 @@ def prompt_few_shot(texte: str, exemples: list) -> str:
     TODO : retourner un prompt qui montre les exemples puis demande la
     classification du nouveau texte, dans le meme format que zero-shot.
     """
-    raise NotImplementedError
+    prompt = (
+        "Classe ce ticket de support client dans une seule de ces catégories : "
+        + ", ".join(CATEGORIES) + ".\n"
+        "Réponds uniquement par le nom exact de la catégorie, en un seul mot, sans rien d'autre.\n\n"
+        "Exemples :\n"
+    )
+    for texte_exemple, categorie in exemples:
+        prompt += f"Ticket : {texte_exemple}\nCatégorie : {categorie}\n\n"
+    prompt += f"Ticket : {texte}\nCatégorie :"
+    return prompt
 
 
 # ---------------------------------------------------------------------------
@@ -149,3 +158,20 @@ if __name__ == "__main__":
     # Decommentez au fur et a mesure de votre progression :
     acc_zero, preds_zero = evaluer_approche(echantillon, prompt_zero_shot, nettoyer_reponse)
     print("Accuracy zero-shot :", acc_zero)
+
+    # Etape 3 - few-shot : 1 exemple par categorie, choisis HORS des 15 tickets de test
+    exemples = [
+        ("La batterie du module Edge se décharge beaucoup trop vite, moins de deux jours d'autonomie contre sept annoncés.", "batterie"),
+        ("Après la mise à jour OTA du firmware version 3.2, la passerelle redémarre en boucle toutes les dix minutes.", "firmware"),
+        ("Impossible d'appairer le nouveau capteur de vibration avec le broker MQTT central, erreur de timeout systématique.", "connectivite"),
+        ("La documentation d'installation du kit Edge AI ne mentionne pas la configuration du VPN, nous sommes bloqués.", "installation"),
+        ("L'application mobile ne permet toujours pas d'exporter les rapports de supervision en PDF, fonctionnalité pourtant annoncée.", "interface"),
+        ("Nous avons détecté une tentative de connexion suspecte sur un de nos capteurs OPC UA la nuit dernière.", "securite"),
+    ]
+
+    # evaluer_approche() donne seulement le texte a la fonction de prompt : on lui ajoute les exemples
+    def prompt_few_shot_tp(texte):
+        return prompt_few_shot(texte, exemples)
+
+    acc_few, preds_few = evaluer_approche(echantillon, prompt_few_shot_tp, nettoyer_reponse, pause=4)
+    print("Accuracy few-shot :", acc_few)
