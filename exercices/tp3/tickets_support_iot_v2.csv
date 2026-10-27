@@ -1,0 +1,81 @@
+id,categorie,texte
+1,connectivite,"Le capteur de température ne se connecte plus au réseau MQTT depuis hier soir, l'icône reste grise en permanence."
+2,batterie,"La batterie du module Edge se décharge beaucoup trop vite, moins de deux jours d'autonomie contre sept annoncés."
+3,firmware,"Après la mise à jour OTA du firmware version 3.2, la passerelle redémarre en boucle toutes les dix minutes."
+4,connectivite,"Impossible d'appairer le nouveau capteur de vibration avec le broker MQTT central, erreur de timeout systématique."
+5,interface,Le tableau de bord Cloud affiche des valeurs de pression complètement aberrantes depuis ce matin.
+6,batterie,"Les piles du détecteur de fumée industriel se vident anormalement vite, remplacées il y a seulement trois semaines."
+7,firmware,"La dernière mise à jour a supprimé la compatibilité avec nos anciens capteurs de la gamme 2020, très gênant."
+8,connectivite,Le pont Edge-Cloud perd la connexion dès que plusieurs équipements émettent en même temps sur le même topic.
+9,installation,"La documentation d'installation du kit Edge AI ne mentionne pas la configuration du VPN, nous sommes bloqués."
+10,interface,"L'application mobile ne permet toujours pas d'exporter les rapports de supervision en PDF, fonctionnalité pourtant annoncée."
+11,securite,"Le certificat X.509 de notre passerelle a expiré et nous n'avons reçu aucune alerte préalable, c'est inquiétant."
+12,connectivite,"Latence très élevée entre le capteur et le Cloud, plus de trois secondes alors que le SLA promet moins de 500 ms."
+13,batterie,Le module solaire ne recharge plus correctement la batterie du capteur installé en extérieur depuis les pluies récentes.
+14,firmware,"Le rollback automatique après échec de mise à jour ne fonctionne pas comme documenté, l'équipement reste hors service."
+15,installation,"Le protocole CoAP configuré par défaut n'est pas reconnu par notre pare-feu industriel, besoin d'aide pour l'ouverture des ports."
+16,interface,"Les alertes de dépassement de seuil sur le tableau de bord arrivent avec un retard de plusieurs minutes, trop tard pour réagir."
+17,securite,Nous avons détecté une tentative de connexion suspecte sur un de nos capteurs OPC UA la nuit dernière.
+18,connectivite,Le passage en LoRaWAN provoque des pertes de paquets fréquentes sur les capteurs les plus éloignés de la passerelle.
+19,batterie,Consommation énergétique du capteur de qualité de l'air bien supérieure à ce qui était indiqué dans la fiche technique.
+20,firmware,Le journal des mises à jour ne montre aucune trace du déploiement effectué la semaine dernière sur la flotte Edge.
+21,installation,"Merci pour votre aide, le déploiement du cache local Edge fonctionne parfaitement bien après la reconfiguration du sous-réseau."
+22,interface,"Excellente réactivité de l'équipe support, le souci d'affichage des courbes de température est totalement résolu."
+23,securite,"La rotation automatique des clés de chiffrement fonctionne comme prévu, aucun incident détecté ce trimestre."
+24,connectivite,"La stabilité de la connexion MQTT s'est nettement améliorée depuis le passage au broker redondant, merci."
+25,batterie,L'autonomie annoncée de sept jours est bien respectée sur nos capteurs de vibration après la dernière mise à jour.
+26,firmware,Le déploiement progressif par vagues (canary) a permis d'éviter toute interruption de service sur notre flotte de deux cents capteurs.
+27,installation,"Le guide de configuration pas à pas pour l'architecture Cloud-Edge est très clair, installation terminée en une heure."
+28,interface,"Le nouveau tableau de bord de supervision est beaucoup plus lisible, bravo pour cette refonte ergonomique."
+29,connectivite,"Depuis le changement d'antenne, plus aucune coupure sur les capteurs situés en zone industrielle à forte interférence."
+30,securite,Le pare-feu applicatif bloque désormais correctement les requêtes anormales détectées sur nos automates connectés.
+31,firmware,Comment planifier une fenêtre de maintenance pour appliquer la mise à jour du firmware sans interrompre la production ?
+32,connectivite,Quelle est la différence de latence attendue entre un déploiement Edge local et un traitement entièrement dans le Cloud ?
+33,installation,Est-il possible de superviser à la fois des capteurs MQTT et des automates OPC UA depuis le même tableau de bord ?
+34,batterie,Quelle est la durée de vie moyenne garantie de la batterie pour un capteur fonctionnant en continu à -10 degrés ?
+35,securite,Comment configurer l'authentification mutuelle TLS entre nos capteurs et le broker MQTT central ?
+36,interface,Peut-on personnaliser les seuils d'alerte par site industriel plutôt que d'avoir une configuration globale unique ?
+37,firmware,Le firmware 3.3 corrige-t-il le bug de redémarrage en boucle déjà signalé sur la version 3.2 ?
+38,connectivite,"Les capteurs déployés sur le site de Lyon perdent la connexion toutes les nuits vers deux heures du matin, motif inconnu."
+39,batterie,"Sur le site d'Écouen, trois capteurs de température affichent une batterie à zéro pour cent alors qu'ils viennent d'être installés."
+40,installation,L'équipe technique du site de Nantes n'arrive pas à joindre la passerelle Edge depuis le changement de routeur industriel.
+41,interface,"Le graphique d'humidité du site de Marseille reste bloqué sur les valeurs d'hier, rafraîchissement automatique en panne."
+42,securite,Un audit de sécurité a révélé que le mot de passe par défaut n'avait pas été changé sur cinq passerelles du site de Toulouse.
+43,firmware,"Après mise à jour, les capteurs du site de Bordeaux transmettent des données toutes les cinq secondes au lieu de toutes les minutes."
+44,connectivite,Le débit réseau chute fortement sur le site de Lille lorsque plus de cinquante capteurs émettent simultanément.
+45,batterie,"Remplacement de batterie effectué avec succès sur les douze capteurs du site de Rennes, autonomie de nouveau normale."
+46,installation,"La nouvelle passerelle Edge du site d'Écouen est opérationnelle, tous les capteurs remontent correctement leurs données."
+47,interface,"Le rapport hebdomadaire automatique n'a pas été envoyé par email cette semaine pour le site de Nantes, cause à déterminer."
+48,securite,"Le certificat de la passerelle du site de Marseille sera renouvelé automatiquement dans quinze jours, rien à faire de votre côté."
+49,firmware,"Une régression a été détectée sur la version 3.2 concernant la gestion des capteurs de pression, correctif prévu la semaine prochaine."
+50,connectivite,"Depuis le passage à la fibre sur le site de Toulouse, la latence moyenne est passée de 800 ms à 120 ms, très satisfaisant."
+51,connectivite,Le module LoRaWAN du site de Nantes ne remonte plus aucune donnée depuis le changement d'antenne relais.
+52,connectivite,"Perte de connexion MQTT récurrente toutes les nuits sur les capteurs du bâtiment B, cause encore inconnue."
+53,connectivite,La passerelle Edge n'arrive plus à joindre le broker central depuis la mise à jour du pare-feu industriel.
+54,batterie,Le capteur de vibration installé en toiture affiche une autonomie divisée par deux depuis l'hiver.
+55,batterie,"Remplacement de batterie recommandé sur douze capteurs du site de Bordeaux, seuil critique atteint."
+56,batterie,La batterie de secours du boîtier Edge ne tient plus la charge après une coupure de courant prolongée.
+57,firmware,"Le firmware 3.4 introduit une régression sur le calcul de la pression différentielle, à corriger rapidement."
+58,firmware,Déploiement du firmware 3.3 terminé avec succès sur l'ensemble de la flotte du site de Lyon.
+59,firmware,Le mécanisme de rollback automatique n'a pas fonctionné après l'échec de mise à jour de cette nuit.
+60,securite,Le scan de vulnérabilité mensuel a détecté un port ouvert non autorisé sur la passerelle du site de Rennes.
+61,securite,La procédure de rotation des certificats X.509 s'est déroulée sans incident sur les cent passerelles du parc.
+62,securite,Une tentative d'authentification échouée répétée a été détectée sur le compte administrateur du tableau de bord.
+63,installation,Le guide d'installation ne précise pas la longueur de câble maximale recommandée entre capteur et passerelle.
+64,installation,Installation de la nouvelle flotte de sondes de température terminée sans difficulté sur le site pilote.
+65,installation,"Besoin d'assistance pour raccorder le capteur de débit à l'automate existant, protocole non reconnu."
+66,interface,Le nouveau widget de comparaison multi-sites du tableau de bord est très apprécié par les équipes terrain.
+67,interface,Impossible de filtrer les alertes par niveau de criticité dans la dernière version de l'application mobile.
+68,interface,L'export CSV des historiques de mesure contient des valeurs dupliquées depuis la mise à jour de la semaine dernière.
+69,connectivite,Débit réseau instable sur le segment Wifi industriel utilisé par les capteurs mobiles de l'atelier.
+70,batterie,Le panneau solaire d'appoint ne suffit plus à recharger le capteur extérieur en période de faible ensoleillement.
+71,firmware,"La mise à jour OTA échoue systématiquement sur les capteurs de la première génération, matériel trop ancien."
+72,securite,Le VPN industriel s'est déconnecté plusieurs fois cette semaine sans que l'équipe en soit notifiée automatiquement.
+73,installation,La checklist d'installation devrait inclure une étape de vérification du niveau de signal avant fixation définitive.
+74,interface,Les notifications push de l'application mobile arrivent avec un décalage horaire incorrect sur certains téléphones.
+75,connectivite,"Après remplacement du routeur industriel, tous les capteurs se sont reconnectés automatiquement sans intervention."
+76,batterie,Bonne nouvelle : le nouveau lot de batteries tient largement les sept jours d'autonomie annoncés en fiche produit.
+77,firmware,"La note de version du firmware 3.4 ne mentionne pas les capteurs concernés, merci de préciser la liste."
+78,securite,"Le rapport d'audit de sécurité trimestriel est disponible, aucune vulnérabilité critique détectée ce trimestre."
+79,installation,"Merci pour l'intervention rapide, la sonde de niveau est maintenant correctement raccordée et opérationnelle."
+80,interface,Suggestion : ajouter un mode sombre au tableau de bord pour les équipes qui travaillent de nuit en salle de contrôle.
