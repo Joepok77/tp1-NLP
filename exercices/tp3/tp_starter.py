@@ -19,6 +19,7 @@ load_dotenv()
 
 DATA_PATH = "tickets_support_iot_v2.csv"
 CATEGORIES = ["connectivite", "batterie", "firmware", "securite", "installation", "interface"]
+MODELE = "gemini-3.5-flash-lite"
 
 # ---------------------------------------------------------------------------
 # Etape 1 - Prise en main
@@ -52,7 +53,12 @@ def prompt_zero_shot(texte: str) -> str:
     TODO : retourner une chaine qui liste les categories possibles et
     demande une reponse au format "un seul mot, la categorie exacte".
     """
-    raise NotImplementedError
+    return (
+        "Classe ce ticket de support client dans une seule de ces catégories : "
+        + ", ".join(CATEGORIES) + ".\n"
+        "Réponds uniquement par le nom exact de la catégorie, en un seul mot, sans rien d'autre.\n\n"
+        "Ticket : " + texte
+    )
 
 
 def nettoyer_reponse(reponse: str) -> str:
@@ -63,7 +69,12 @@ def nettoyer_reponse(reponse: str) -> str:
       - chercher quelle categorie de CATEGORIES apparait dans la reponse
       - retourner 'INCONNUE' si aucune categorie n'est reconnue
     """
-    raise NotImplementedError
+    reponse = reponse.lower().replace("é", "e").replace("è", "e")  # "Sécurité" -> "securite"
+    mots = re.sub(r"[^a-z]", " ", reponse).split()                  # retire ponctuation, ** etc.
+    for categorie in CATEGORIES:
+        if categorie in mots:
+            return categorie
+    return "INCONNUE"
 
 
 # ---------------------------------------------------------------------------
@@ -114,7 +125,17 @@ def evaluer_approche(df_echantillon: pd.DataFrame, fonction_prompt, fonction_ext
       - inserer un temps de pause (time.sleep(pause)) entre chaque appel
       - retourner l'accuracy (float) et la liste des predictions
     """
-    raise NotImplementedError
+    predictions = []
+    bonnes = 0
+    for _, ligne in df_echantillon.iterrows():
+        reponse = appeler_llm(fonction_prompt(ligne["texte"]), model=MODELE)
+        prediction = fonction_extraction(reponse)
+        predictions.append(prediction)
+        if prediction == ligne["categorie"]:
+            bonnes += 1
+        print(f"  vraie: {ligne['categorie']:<13} predite: {prediction:<13} brute: {reponse!r}")
+        time.sleep(pause)
+    return bonnes / len(df_echantillon), predictions
 
 
 if __name__ == "__main__":
@@ -126,5 +147,5 @@ if __name__ == "__main__":
     print(appeler_llm("Explique en une phrase ce qu'est un capteur IoT", model="gemini-3.5-flash-lite"))
 
     # Decommentez au fur et a mesure de votre progression :
-    # acc_zero, preds_zero = evaluer_approche(echantillon, prompt_zero_shot, nettoyer_reponse)
-    # print("Accuracy zero-shot :", acc_zero)
+    acc_zero, preds_zero = evaluer_approche(echantillon, prompt_zero_shot, nettoyer_reponse)
+    print("Accuracy zero-shot :", acc_zero)
