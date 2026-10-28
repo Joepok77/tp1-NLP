@@ -167,8 +167,8 @@ if __name__ == "__main__":
 
     # Decommentez au fur et a mesure de votre progression :
     
-    # acc_zero, preds_zero = evaluer_approche(echantillon, prompt_zero_shot, nettoyer_reponse)
-    # print("Accuracy zero-shot :", acc_zero)
+    acc_zero, preds_zero = evaluer_approche(echantillon, prompt_zero_shot, nettoyer_reponse)
+    print("Accuracy zero-shot :", acc_zero)
 
     # Etape 3 - few-shot : 1 exemple par categorie, choisis HORS des 15 tickets de test
     exemples = [
@@ -184,8 +184,8 @@ if __name__ == "__main__":
     def prompt_few_shot_tp(texte):
         return prompt_few_shot(texte, exemples)
 
-    # acc_few, preds_few = evaluer_approche(echantillon, prompt_few_shot_tp, nettoyer_reponse, pause=4)
-    # print("Accuracy few-shot :", acc_few)
+    acc_few, preds_few = evaluer_approche(echantillon, prompt_few_shot_tp, nettoyer_reponse, pause=4)
+    print("Accuracy few-shot :", acc_few)
 
     # Etape 4 - chain-of-thought sur 8 tickets ambigus (hors des 15 tickets de test)
     tickets_cot = df[df["id"].isin([15, 25, 33, 35, 40, 43, 53, 72])]
@@ -197,3 +197,8 @@ if __name__ == "__main__":
     print("\nChain-of-thought sur les tickets ambigus :")
     acc_cot, preds_cot = evaluer_approche(tickets_cot, prompt_cot, extraire_categorie_cot, pause=4)
     print("Accuracy chain-of-thought (ambigus) :", acc_cot)
+
+    # Chain-of-thought sur les memes 15 tickets que zero-shot et few-shot (pour le tableau de l'etape 5)
+    print("\nChain-of-thought sur l'echantillon de test :")
+    acc_cot_test, preds_cot_test = evaluer_approche(echantillon, prompt_cot, extraire_categorie_cot, pause=4)
+    print("Accuracy chain-of-thought :", acc_cot_test)
