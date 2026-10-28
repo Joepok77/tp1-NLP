@@ -1,0 +1,6 @@
+approche,accuracy,entrainement,cout,latence,gpu
+TF-IDF + regression logistique,0.6,"oui, quelques secondes sur CPU",quasi nul (local),tres faible (millisecondes),non
+BERT feature extraction,non mesure (seance 2 non realisee),"oui, classifieur leger sur les vecteurs BERT",faible (local),faible a moyenne,"conseille, pas obligatoire"
+Zero-shot (Gemini),1.0,aucun,appel API payant au-dela du gratuit (~80 tokens/ticket),elevee (~1 a 2 s par ticket + limites de requetes),non (cote fournisseur)
+Few-shot (Gemini),1.0,aucun,"appel API, ~3,6x plus de tokens (~290/ticket)",elevee,non (cote fournisseur)
+Chain-of-thought (Gemini),0.933,aucun,"appel API, ~1,5x plus de tokens (~125/ticket)",la plus elevee (reponses plus longues),non (cote fournisseur)
